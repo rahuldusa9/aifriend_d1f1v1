@@ -1,0 +1,39 @@
+html,body,#__next{height:100%;}
+body{margin:0;font-family:Inter,system-ui,Arial,Helvetica,sans-serif;background:#f7f7f8;color:#111}
+input,button,select,textarea{font-size:14px}
+button{cursor:pointer}
+
+/* WhatsApp-like layout */
+.app-root{display:flex;height:100vh}
+.sidebar{width:320px;background:#ffffff;border-right:1px solid #e6e6e6;padding:12px;box-sizing:border-box}
+.sidebar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.user-info{font-weight:600}
+.create-friend input{width:100%;margin-bottom:6px;padding:8px}
+.create-friend button{width:100%;padding:8px}
+.friends-list{list-style:none;padding:0;margin:8px 0;overflow:auto}
+.friend-item{display:flex;gap:8px;align-items:center;padding:8px;border-radius:8px;cursor:pointer}
+.friend-item:hover{background:#f2f2f2}
+.avatar{width:40px;height:40px;border-radius:50%;background:#007bff;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.meta .name{font-weight:600}
+.meta .traits{font-size:12px;color:#666}
+
+.main-area{flex:1;display:flex;flex-direction:column;padding:12px}
+.auth-section{max-width:640px;margin:auto}
+.form-row input{margin-right:8px}
+
+.chat-window{display:flex;flex-direction:column;height:100%}
+.chat-header{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid #eee}
+.messages{flex:1;padding:12px;overflow:auto;background:linear-gradient(#fff,#fafafa)}
+.bubble{max-width:70%;margin-bottom:8px;padding:8px;border-radius:12px;position:relative}
+.bubble-user{margin-left:auto;background:#dcf8c6}
+.bubble-ai{margin-right:auto;background:#fff}
+.bubble-time{font-size:11px;color:#666;margin-top:6px;text-align:right}
+.chat-input{display:flex;gap:8px;padding:8px;border-top:1px solid #eee}
+.chat-input input{flex:1;padding:8px}
+.typing{font-style:italic;color:#666;margin-bottom:8px}
+
+@media (max-width:800px){
+	.sidebar{width:100%;height:auto;border-right:none}
+	.app-root{flex-direction:column}
+	.main-area{padding:8px}
+}
