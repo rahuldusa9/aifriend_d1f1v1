@@ -34,6 +34,12 @@ export default function Home() {
 
   useEffect(()=>{ if (token) loadFriends(); }, [token]);
 
+  function logout(){
+    setToken(null); setUser(null);
+    localStorage.removeItem('aif_token');
+    localStorage.removeItem('aif_user');
+  }
+
   async function api(path, method='GET', body) {
     const headers = { 'Content-Type': 'application/json' };
     if (token) headers['Authorization'] = 'Bearer ' + token;
@@ -72,7 +78,7 @@ export default function Home() {
 
   return (
     <div className="app-root">
-      <Sidebar user={user} friends={friends} onSelectFriend={onSelectFriend} onCreateFriend={createFriend} onReload={loadFriends} />
+  <Sidebar user={user} friends={friends} onSelectFriend={onSelectFriend} onCreateFriend={createFriend} onReload={loadFriends} onLogout={logout} />
 
       <main className="main-area">
         {!user && (

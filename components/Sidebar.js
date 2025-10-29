@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function Sidebar({ user, friends, onSelectFriend, onCreateFriend, onReload }){
+export default function Sidebar({ user, friends, onSelectFriend, onCreateFriend, onReload, onLogout }){
   const [fname, setFname] = useState('');
   const [personality, setPersonality] = useState('supportive,playful');
 
@@ -8,7 +8,10 @@ export default function Sidebar({ user, friends, onSelectFriend, onCreateFriend,
     <aside className="sidebar">
       <div className="sidebar-header">
         <div className="user-info">{user ? `Hi, ${user.name}` : 'Not logged'}</div>
-        <button className="reload" onClick={onReload}>⟳</button>
+        <div className="header-actions">
+          <button className="reload" title="Reload" onClick={onReload}>⟳</button>
+          {user && <button className="logout" title="Logout" onClick={onLogout}>⎋</button>}
+        </div>
       </div>
 
       <div className="create-friend">
