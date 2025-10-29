@@ -2,7 +2,19 @@ import { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import ChatWindow from '../components/ChatWindow';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:4000/api' || 'https://aifriend-d1.vercel.app/';
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:4000/api';
+
+// If running in the browser on a non-localhost origin but NEXT_PUBLIC_API_BASE
+// is still pointing to localhost, warn so deployment env var can be fixed.
+if (typeof window !== 'undefined') {
+  try {
+    const host = window.location.hostname;
+    if (host !== 'localhost' && API_BASE.includes('localhost')) {
+      // eslint-disable-next-line no-console
+      console.error('[CONFIG] NEXT_PUBLIC_API_BASE is not set for production — frontend is pointing to', API_BASE, '\nSet NEXT_PUBLIC_API_BASE in your Vercel project settings to your backend URL (including /api)');
+    }
+  } catch (e) { /* ignore in SSR */ }
+}
 
 export default function Home() {
   const [user, setUser] = useState(null);

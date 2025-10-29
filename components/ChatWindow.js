@@ -19,11 +19,31 @@ export default function ChatWindow({ apiBase, token, friend, safeDefault=true })
     // initialize socket once when component mounts
     if (!socketRef.current && token) {
       try {
-        const socket = io(apiBase.replace(/\/$/, ''), { transports: ['websocket'] });
+        // ensure we connect sockets to the backend origin, not to a path like /api
+        const socketBase = apiBase.replace(/\/api\/?$/, '').replace(/\/$/, '');
+        const socket = io(socketBase, { transports: ['websocket'] });
         socketRef.current = socket;
+
+        // If socket never connects within this timeout, fall back to polling
+        let fallbackTimer = setTimeout(()=>{
+          if (!socket.connected) {
+            console.warn('Socket did not connect in time, falling back to polling');
+            startPolling();
+          }
+        }, 2500);
+
         socket.on('connect', () => {
+          clearTimeout(fallbackTimer);
+          stopPolling();
           socket.emit('register', { token });
         });
+
+        socket.on('connect_error', (err) => {
+          console.warn('Socket connect_error', err);
+          // start polling as a fallback
+          startPolling();
+        });
+
         socket.on('chat:message', (msg) => {
           // msg may be an object; push relevant messages for the current friend
           try {
@@ -38,7 +58,17 @@ export default function ChatWindow({ apiBase, token, friend, safeDefault=true })
         });
       } catch (e) { console.warn('socket init failed', e); }
     }
-    return ()=>{ mounted.current = false; stopPolling(); };
+    return ()=>{
+      mounted.current = false;
+      stopPolling();
+      // cleanup socket
+      try {
+        if (socketRef.current) {
+          socketRef.current.disconnect();
+          socketRef.current = null;
+        }
+      } catch (e) { /* ignore */ }
+    };
   }, [friend]);
 
   function api(path, method='GET', body){
